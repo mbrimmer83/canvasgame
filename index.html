@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hero</title>
+  <link rel="stylesheet" href="canvasgame.css">
+</head>
+<body>
+  <canvas id="canvas" width="512" height="480"></canvas>
+  <script>
+  var mainCounter = 0;
+  var heroX = 200;
+  var heroY = 200;
+  var speed = 15;
+  var idx1 = 0;
+  var idx2 = 0;
+  var score = 0;
+  var highScore = 0;
+  var shout = "";
+  var mov1 = 1;
+  var mov2 = -1;
+  var mov3 = 1;
+  var mov4 = -1;
+  window.addEventListener('keydown', function(e) {
+    var key = e.keyCode;
+    if (key === 37) { // left
+      heroX = mov1;
+    }
+    if (key === 39) { // right
+      heroX = mov2;
+    }
+    if (key === 38) { // up
+      heroY = mov3;
+    }
+    if (key === 40) { // down
+      heroY = mov4;
+    }
+    if (heroX > 512) {
+      heroX = 0;
+    }
+    if (heroY > 480) {
+      heroY = 0;
+    }
+    if (heroX < 0) {
+      heroX = 512;
+    }
+    if (heroY < 0) {
+      heroY = 480;
+    }
+  });
+
+  var monsterX = 100;
+  var monsterY = 25;
+  var monsterXSpeed = 2;
+  var monsterYSpeed = 2;
+  function monsterMovement() {
+    if (mainCounter === 75) {
+      idx1 = Math.floor(Math.random() * 3 - 1);
+      idx2 = Math.floor(Math.random() * 3 - 1);
+      mainCounter = 0;
+      shout = "";
+    }
+    monsterX += (monsterXSpeed * idx1);
+    monsterY += (monsterYSpeed * idx2);
+      // if (idx === 0) {
+      //   monsterX -= monsterSpeed;
+      // } else if (idx === 1) {
+      //   monsterX += monsterSpeed;
+      // } else if (idx === 2) {
+      //   monsterY += monsterSpeed;
+      // } else if (idx === 3) {
+      //   monsterY -= monsterSpeed;
+      // } else if (idx === 4) {
+      //   monsterX -= monsterSpeed;
+      //   monsterY -= monsterSpeed;
+      // } else if (idx === 5) {
+      //   monsterX += monsterSpeed;
+      //   monsterY += monsterSpeed;
+      // } else if (idx === 6) {
+      //   monsterX -= monsterSpeed;
+      //   monsterY += monsterSpeed;
+      // } else if (idx === 7) {
+      //   monsterX += monsterSpeed;
+      //   monsterY -= monsterSpeed;
+      // }
+    if (monsterX > 512) {
+      monsterX = 0;
+    }
+    if (monsterY > 480) {
+      monsterY = 0;
+    }
+    if (monsterX < 0) {
+      monsterX = 512;
+    }
+    if (monsterY < 0) {
+      monsterY = 480;
+    }
+    mainCounter += 1;
+  }
+function checkWinner () {
+  if (monsterX + 32 < heroX) {
+  } else if (heroX + 32 < monsterX) {
+  } else if (monsterY + 32 < heroY) {
+  } else if (heroY + 32 < monsterY) {
+  } else {
+    score += 1;
+    monsterX = Math.floor(Math.random() * 400);
+    monsterY = Math.floor(Math.random() * 400);
+    shout = "Hooray";
+    goblinRandom();
+  }
+  if (score > highScore) {
+    highScore = score;
+  }
+}
+var goblin1X = 100;
+var goblin1Y = 100;
+var goblin2X = 300;
+var goblin2Y = 300;
+function goblinRandom() {
+  goblin1X = Math.floor(Math.random() * 400);
+  goblin1Y = Math.floor(Math.random() * 400);
+  goblin2X = Math.floor(Math.random() * 400);
+  goblun2Y = Math.floor(Math.random() * 400);
+}
+
+function heroMovement() {
+  heroX += (mov1 * speed);
+  heroX += (mov2 * speed);
+  heroY += (mov3 * speed);
+  heroY += (mov4 * speed);
+
+}
+
+  var hero = new Image();
+  hero.src = '../canvasgame/images/hero.png';
+
+  var herobackground = new Image();
+  herobackground.src = '../canvasgame/images/background.png';
+
+  var monster = new Image();
+  monster.src = '../canvasgame/images/monster.png';
+
+  var goblin = new Image();
+  goblin.src = '../canvasgame/images/goblin.png';
+
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+
+  function main() {
+    ctx.fillRect(0, 0, 400, 400);
+    ctx.beginPath();
+    ctx.drawImage(herobackground, 0, 0, 512, 480);
+    ctx.font = "25px serif";
+    ctx.fillText('Score: ' + score, 40, 50);
+    ctx.fillText('High score: ' + highScore, 40, 75);
+    ctx.fillText(shout, 220, 240);
+    ctx.drawImage(monster, monsterX, monsterY, 25, 25);
+    ctx.drawImage(hero, heroX, heroY, 25, 25);
+    ctx.drawImage(goblin, goblin1X, goblin1Y, 25, 25);
+    ctx.drawImage(goblin, goblin2X, goblin2Y, 25, 25);
+    ctx.fill();
+
+    requestAnimationFrame(main);
+    monsterMovement();
+    checkWinner();
+    heroMovement();
+  }
+  main();
+  </script>
+</body>
+</html>
