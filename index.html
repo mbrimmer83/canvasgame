@@ -6,6 +6,9 @@
   <link rel="stylesheet" href="canvasgame.css">
 </head>
 <body>
+  <div id="top-box">
+    <p>Hero Game</p>
+  </div>
   <canvas id="canvas" width="512" height="480"></canvas>
   <script>
   var mainCounter = 0;
@@ -14,6 +17,10 @@
   var speed = 2;
   var idx1 = 0;
   var idx2 = 0;
+  var idx3 = 0;
+  var idx4 = 0;
+  var idx5 = 0;
+  var idx6 = 0;
   var score = 0;
   var highScore = 0;
   var shout = "";
@@ -107,7 +114,6 @@ function checkWinner () {
     monsterX = Math.floor(Math.random() * 400);
     monsterY = Math.floor(Math.random() * 400);
     shout = "Hooray";
-    goblinRandom();
   }
   if (score > highScore) {
     highScore = score;
@@ -117,11 +123,57 @@ var goblin1X = 100;
 var goblin1Y = 100;
 var goblin2X = 300;
 var goblin2Y = 300;
-function goblinRandom() {
-  goblin1X = Math.floor(Math.random() * 400);
-  goblin1Y = Math.floor(Math.random() * 400);
-  goblin2X = Math.floor(Math.random() * 400);
-  goblun2Y = Math.floor(Math.random() * 400);
+// function goblinRandom() {
+//   goblin1X = Math.floor(Math.random() * 400);
+//   goblin1Y = Math.floor(Math.random() * 400);
+//   goblin2X = Math.floor(Math.random() * 400);
+//   goblun2Y = Math.floor(Math.random() * 400);
+// }
+
+function goblin1Movement() {
+  if (mainCounter === 75) {
+    idx3 = Math.floor(Math.random() * 3 - 1);
+    idx4 = Math.floor(Math.random() * 3 - 1);
+    mainCounter = 0;
+  }
+  goblin1X += (monsterXSpeed * idx3);
+  goblin1Y += (monsterYSpeed * idx4);
+  if (goblin1X > 512) {
+    goblin1X = 0;
+  }
+  if (goblin1Y > 480) {
+    goblin1Y = 0;
+  }
+  if (goblin1X < 0) {
+    goblin1X = 512;
+  }
+  if (goblin1Y < 0) {
+    goblin1Y = 480;
+  }
+  mainCounter += 1;
+}
+
+function goblin2Movement() {
+  if (mainCounter === 75) {
+    idx5 = Math.floor(Math.random() * 3 - 1);
+    idx6 = Math.floor(Math.random() * 3 - 1);
+    mainCounter = 0;
+  }
+  goblin2X += (monsterXSpeed * idx5);
+  goblin2Y += (monsterYSpeed * idx6);
+  if (goblin2X > 512) {
+    goblin2X = 0;
+  }
+  if (goblin2Y > 480) {
+    goblin2Y = 0;
+  }
+  if (goblin2X < 0) {
+    goblin2X = 512;
+  }
+  if (goblin2Y < 0) {
+    goblin2Y = 480;
+  }
+  mainCounter += 1;
 }
 
 function heroMovement() {
@@ -166,9 +218,11 @@ function heroMovement() {
     ctx.fill();
 
     requestAnimationFrame(main);
-    monsterMovement();
     checkWinner();
     heroMovement();
+    monsterMovement();
+    goblin1Movement();
+    goblin2Movement();
   }
   main();
   </script>
