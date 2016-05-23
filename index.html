@@ -10,8 +10,10 @@
     <p>Hero Game</p>
   </div>
   <canvas id="canvas" width="512" height="480"></canvas>
-  <script>
+  <script src="canvas.js"></script>
+  <!-- <script>
   var mainCounter = 0;
+  var goblinCounter = 0;
   var heroX = 200;
   var heroY = 200;
   var speed = 2;
@@ -24,23 +26,21 @@
   var score = 0;
   var highScore = 0;
   var shout = "";
-  var state1 = 'off';
-  var state2 = 'off';
-  var state3 = 'off';
-  var state4 = 'off';
+  var heroDirX = 0;
+  var heroDirY = 0;
   window.addEventListener('keydown', function(e) {
     var key = e.keyCode;
     if (key === 37) { // left
-      state1 = 'on';
+      heroDirX = 1;
     }
     if (key === 39) { // right
-      state2 = 'on'
+      heroDirX = -1;
     }
     if (key === 38) { // up
-      state3 = 'on';
+      heroDirY = 1;
     }
     if (key === 40) { // down
-      state4 = 'on';
+      heroDirY = -1;
     }
     if (heroX > 512) {
       heroX = 0;
@@ -56,6 +56,21 @@
     }
   });
 
+  window.addEventListener('keyup', function(event) {
+    var key = event.keyCode;
+    if (key === 37) { // left
+      heroDirX = 0;
+    }
+    if (key === 39) { // right
+      heroDirX = 0;
+    }
+    if (key === 38) { // up
+      heroDirY = 0;
+    }
+    if (key === 40) { // down
+      heroDirY = 0;
+    }
+  });
   var monsterX = 100;
   var monsterY = 25;
   var monsterXSpeed = 2;
@@ -69,27 +84,6 @@
     }
     monsterX += (monsterXSpeed * idx1);
     monsterY += (monsterYSpeed * idx2);
-      // if (idx === 0) {
-      //   monsterX -= monsterSpeed;
-      // } else if (idx === 1) {
-      //   monsterX += monsterSpeed;
-      // } else if (idx === 2) {
-      //   monsterY += monsterSpeed;
-      // } else if (idx === 3) {
-      //   monsterY -= monsterSpeed;
-      // } else if (idx === 4) {
-      //   monsterX -= monsterSpeed;
-      //   monsterY -= monsterSpeed;
-      // } else if (idx === 5) {
-      //   monsterX += monsterSpeed;
-      //   monsterY += monsterSpeed;
-      // } else if (idx === 6) {
-      //   monsterX -= monsterSpeed;
-      //   monsterY += monsterSpeed;
-      // } else if (idx === 7) {
-      //   monsterX += monsterSpeed;
-      //   monsterY -= monsterSpeed;
-      // }
     if (monsterX > 512) {
       monsterX = 0;
     }
@@ -119,22 +113,40 @@ function checkWinner () {
     highScore = score;
   }
 }
-var goblin1X = 100;
-var goblin1Y = 100;
-var goblin2X = 300;
-var goblin2Y = 300;
-// function goblinRandom() {
-//   goblin1X = Math.floor(Math.random() * 400);
-//   goblin1Y = Math.floor(Math.random() * 400);
-//   goblin2X = Math.floor(Math.random() * 400);
-//   goblun2Y = Math.floor(Math.random() * 400);
-// }
+
+  var goblin1X = 100;
+  var goblin1Y = 100;
+  var goblin2X = 300;
+  var goblin2Y = 300;
+
+  function checkLoser () {
+    if (goblin1X + 32 < heroX) {
+    } else if (heroX + 32 < goblin1X) {
+    } else if (goblin1Y + 32 < heroY) {
+    } else if (heroY + 32 < goblin1Y) {
+    } else {
+      score = 0;
+      goblin1X = Math.floor(Math.random() * 400);
+      goblin1Y = Math.floor(Math.random() * 400);
+      shout = "Sorry";
+    }
+    if (goblin2X + 32 < heroX) {
+    } else if (heroX + 32 < goblin2X) {
+    } else if (goblin2Y + 32 < heroY) {
+    } else if (heroY + 32 < goblin2Y) {
+    } else {
+      score = 0;
+      goblin2X = Math.floor(Math.random() * 400);
+      goblin2Y = Math.floor(Math.random() * 400);
+      shout = "Sorry";
+    }
+  }
 
 function goblin1Movement() {
-  if (mainCounter === 75) {
+  if (goblinCounter === 75) {
     idx3 = Math.floor(Math.random() * 3 - 1);
     idx4 = Math.floor(Math.random() * 3 - 1);
-    mainCounter = 0;
+    goblinCounter = 0;
   }
   goblin1X += (monsterXSpeed * idx3);
   goblin1Y += (monsterYSpeed * idx4);
@@ -150,14 +162,14 @@ function goblin1Movement() {
   if (goblin1Y < 0) {
     goblin1Y = 480;
   }
-  mainCounter += 1;
+  goblinCounter += 1;
 }
 
 function goblin2Movement() {
-  if (mainCounter === 75) {
+  if (goblinCounter === 75) {
     idx5 = Math.floor(Math.random() * 3 - 1);
     idx6 = Math.floor(Math.random() * 3 - 1);
-    mainCounter = 0;
+    goblinCounter = 0;
   }
   goblin2X += (monsterXSpeed * idx5);
   goblin2Y += (monsterYSpeed * idx6);
@@ -173,17 +185,17 @@ function goblin2Movement() {
   if (goblin2Y < 0) {
     goblin2Y = 480;
   }
-  mainCounter += 1;
+  goblinCounter += 1;
 }
 
 function heroMovement() {
-  if (state1 === 'on') {
+  if (heroDirX === 1) {
   heroX -= speed;
-} else if (state2 === 'on') {
+} else if (heroDirX === -1) {
   heroX += speed;
-} else if (state3 === 'on') {
+} else if (heroDirY === 1) {
   heroY -= speed;
-} else if (state4 === 'on') {
+} else if (heroDirY === -1) {
   heroY += speed;
 }
 }
@@ -204,7 +216,6 @@ function heroMovement() {
   var ctx = canvas.getContext('2d');
 
   function main() {
-    ctx.fillRect(0, 0, 400, 400);
     ctx.beginPath();
     ctx.drawImage(herobackground, 0, 0, 512, 480);
     ctx.font = "25px serif";
@@ -219,12 +230,13 @@ function heroMovement() {
 
     requestAnimationFrame(main);
     checkWinner();
+    checkLoser();
     heroMovement();
     monsterMovement();
     goblin1Movement();
     goblin2Movement();
   }
   main();
-  </script>
+  </script> -->
 </body>
 </html>
