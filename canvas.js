@@ -30,16 +30,16 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 var heroimage = new Image();
-heroimage.src = '../canvasgame/images/hero.png';
+heroimage.src = './images/hero.png';
 
 var herobackground = new Image();
-herobackground.src = '../canvasgame/images/background.png';
+herobackground.src = './images/background.png';
 
 var monster = new Image();
-monster.src = '../canvasgame/images/monster.png';
+monster.src = './images/monster.png';
 
 var goblin = new Image();
-goblin.src = '../canvasgame/images/goblin.png';
+goblin.src = './images/goblin.png';
 
 function main() {
   ctx.beginPath();
